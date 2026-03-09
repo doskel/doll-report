@@ -2,26 +2,26 @@
 - name: Ensure gatus config dir
   ansible.builtin.file:
     path: /opt/gatus_config
-    mode: 0644
+    mode: "644"
     state: directory
 
 - name: Ensure gatus data dir
   ansible.builtin.file:
     path: /opt/gatus_data
-    mode: 0644
+    mode: "644"
     state: directory
 
 - name: Ensure doll report config dir
   ansible.builtin.file:
     path: /opt/doll.report.nginx.conf.d
     state: directory
-    mode: 0644
+    mode: "644"
 
 - name: Instance config files
   ansible.builtin.template:
     src: gatus_config.yaml.j2
     dest: /opt/gatus_config/{{ dashboard.key }}.yaml
-    mode: 0644
+    mode: "644"
   loop: "{{ dashboards | dict2items }}"
   loop_control:
     loop_var: dashboard
@@ -50,7 +50,7 @@
   ansible.builtin.template:
     src: nginx_server.conf.j2
     dest: /opt/doll.report.nginx.conf.d/{{ dashboard.key }}.conf
-    mode: 0644
+    mode: "644"
   loop: "{{ dashboards | dict2items }}"
   loop_control:
     loop_var: dashboard
