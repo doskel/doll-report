@@ -24,7 +24,7 @@ dashboards:
     # gatus config goes straight in here
 ```
 
-that's it! nothing more is required.
+that's it! the name of the dashboard will be used as the domain, your instance will be available at `https://<name of dashboard>.doll.report`
 
 
 ## Rules
