@@ -1,0 +1,10 @@
+name: lint ansible
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  ansible-lint:
+    uses: ansible/ansible-content-actions/.github/workflows/ansible_lint.yaml@main
+
