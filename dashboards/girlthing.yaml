@@ -1,32 +1,31 @@
-ui:
-  title: "girlthi.ng status"
-  header: "girlthing.doll.report"
-  # dashboard-heading: "girlthi.ng and doll.rehab status"
-  dashboard-subheading: "Service Status"
-  logo: "https://girlthi.ng/~aperture/img/girlthing-heart.png"
-  favicon:
+ui:  # web-ui configuration, see it applied at https://girlthing.doll.report
+  title: "girlthi.ng status"  # <title/> tag 
+  header: "girlthing.doll.report"  # dashboard <h1>
+  dashboard-subheading: "Service Status"  # dashboard <h2>
+  logo: "https://girlthi.ng/~aperture/img/girlthing-heart.png"  # web ui main logo
+  favicon:  # favico
     default: "https://girlthi.ng/~aperture/img/girlthing-heart.png"
     size16x16: "https://girlthi.ng/~aperture/img/girlthing-heart.png"
     size32x32: "https://girlthi.ng/~aperture/img/girlthing-heart.png"
   default-sort-by: group
-  custom-css: |2
+  custom-css: |2  # dashboard custom css
     body {
       font-family: monospace;
     }
 
-storage:
+storage:  # configure persistant history storage
   type: sqlite
   caching: true
-  path: /status_history/history.db
+  path: /status_history/history.db  # keep as is!!
 
-endpoints:
+endpoints:  # endpoints to probe. check gatus README.md for options
   - name: sharkey
     url: https://sk.girlthi.ng
     interval: 10s
     conditions:
       - "[STATUS] == 200"
       - "[CERTIFICATE_EXPIRATION] > 48h"
-    group: "services"
+    group: "services"  # Optional group
 
   - name: ircd
     url: tls://irc.girlthi.ng:6697
@@ -36,20 +35,19 @@ endpoints:
       - "[CERTIFICATE_EXPIRATION] > 48h"
     group: "services"
 
+  - name: mumble
+    url: udp://miserable.girlthi.ng:64738
+    interval: 10s
+    conditions:
+      - "[CONNECTED] == true"
+    group: "services"
+
   - name: desktop.girtlhi.ng
     url: https://desktop.girlthi.ng
     interval: 10s
     conditions:
       - "[STATUS] == 200"
       - "[CERTIFICATE_EXPIRATION] > 48h"
-    group: "services"
-
-
-  - name: mumble
-    url: udp://miserable.girlthi.ng:64738
-    interval: 10s
-    conditions:
-      - "[CONNECTED] == true"
     group: "services"
 
   - name: znc web ui
