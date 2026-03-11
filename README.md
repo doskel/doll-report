@@ -19,8 +19,6 @@ The `<dashboard_name>.yaml` files contain [gatus](https://github.com/TwiN/gatus)
 The filename (excluding `.yaml`) will be used as the subdomain for the dashboard,
 your instance will be available at `https://<name of dashboard>.doll.report`.
 
-Feel free to customize the ui section to your desire within your own defintion file !! :)
-
 
 ## Rules
 - Keep your probe intervals above two seconds (this applies to everything apart from domain expiration probes)
@@ -29,11 +27,75 @@ Feel free to customize the ui section to your desire within your own defintion f
 - Domain expiration probe intervals not allowed to be lower than 30 minutes between requests.
   (See more info here: https://github.com/TwiN/gatus?tab=readme-ov-file#monitoring-domain-expiration)
 
-## Alerts?
 
-Alerts are coming very soon. Thermia will shim auth details for an smtp server into your gatus config through the deploy pipeline, which you
-can then use to set up email alerts for your own dashboard.
+## Secret configuration variables
+
+### Transparancy
+
+> [!CAUTION]
+> The following section is kind of important, so please read it in its entirety.
+
+Thermia is the only one with access to the server and the age private key.
+This will never intentionally change, however, incidents can happen. Please
+take proper care to ensure that the information that exists within the environment files results in a mild annoyance at most if leaked, and mind your opsec.
+
+Also note thermia will have to read the env files to ensure nothing malicious is being loaded into the containers. 
+
+If there are any concerns don't hesitate to reach out to thermia, either through
+already established channels or a github issue.
+
+### `age` asymetrical encryption
+
+To keep alert configuration private, users can use
+[`age`](https://github.com/FiloSottile/age) to encrypt an environment file and
+use the variables defined within it in their dashboard configuration.
+
+There is a script to make this process easier in [`crypt/encrypt-envfile.sh`](crypt/encrypt-envfile). Make sure age is installed on the local system.
+
+> [!NOTE]
+> The resulting file needs to start with the name of the dashboard it should
+> be attached to, and have the file ending `.env.age`.
+>
+> i.e `dashboards/myname.env.age` for `dashboards/myname.yaml`
+
+More reading: https://github.com/TwiN/gatus?tab=readme-ov-file#alerting
+
+
+### Example:
+Assuming dashboard configuration is at `dashboards/example.yaml`, create an envfile at the repository root as follows
+
+```bash
+cat << EOF > local_envfile  # local_envfile is in .gitignore
+DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/**********/**********"
+EOF
+```
+
+Encrypt it using the script from the repository root, and redirect the output to the proper location:
+```
+./crypt/encrypt-envfile.sh local_envfile > ./dashboards/example.env.age
+```
+
+Finally, use the environment variable in the dashboard config:
+
+```yaml
+# [... snip ...]
+alerting:
+  discord:
+    webhook-url: ${DISCORD_WEBHOOK_URL}  # environment variable
+    title: ":ribbon: doll.report alert"
+    default-alert:
+      description: "health check failed"
+      send-on-resolved: true
+      failure-threshold: 5
+      success-threshold: 5
+# [... snip ...]
+```
+
+> [!NOTE]
+> Make sure to only commit and push your encrypted environment file.
+> `local_envfile` is in .gitignore for convenience
+
 
 ## Issues?
 
-Feel free to open issues on the repo if there are any questions!
+Feel free to open issues on the repo if there are any bugs or questions!
