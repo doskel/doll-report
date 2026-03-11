@@ -37,7 +37,7 @@ your instance will be available at `https://<name of dashboard>.doll.report`.
 
 Thermia is the only one with access to the server and the age private key.
 This will never intentionally change, however, incidents can happen. Please
-take proper care to ensure that the information that exists within the environment files results in a mild annoyance at most if leaked, and mind your opsec.
+take proper care to ensure that the information that exists within the environment files results in a mild annoyance at most if accessed by a third party.
 
 Also note thermia will have to read the env files to ensure nothing malicious is being loaded into the containers. 
 
@@ -99,3 +99,6 @@ alerting:
 ## Issues?
 
 Feel free to open issues on the repo if there are any bugs or questions!
+
+---
+[![doll.report 88x31](https://doll.report/img/doll-report.gif)](https://doll.report) [![thermia 88x31](https://doll.report/img/thermia.gif)](https://girlthi.ng/~thermia)
