@@ -40,6 +40,10 @@ ui: # web-ui configuration, feel free to change it !!
       padding: 1rem 0 !important;
     }
 
+    input, button>* {
+      text-transform: lowercase;
+    }
+
 _variables:
   - &interval 60s
   - &http_condition
